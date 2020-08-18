@@ -1,0 +1,19 @@
+{
+	"name": "botstankin",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"scripts": {
+		"start": "env=development nodemon index.js",
+		"test": "node test.js"
+	},
+	"dependencies": {
+		"node-vk-bot-api": "3.3.4",
+		"pg": "^7.18.2"
+	},
+	"devDependencies": {
+		"nodemon": "^1.19.4"
+	},
+	"author": "",
+	"license": "ISC"
+}
