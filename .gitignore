@@ -4,6 +4,7 @@
 
 *.pem
 sftp-config.json
+*lock.json
 
 ### Node ###
 # Logs

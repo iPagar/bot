@@ -5,7 +5,22 @@ const db = require("./queries");
 const VkBot = require("node-vk-bot-api");
 const Markup = require("node-vk-bot-api/lib/markup");
 
-const bot = new VkBot(process.env.VK_BOT);
+const https = require("https");
+const fs = require("fs");
+
+const bot = new VkBot({
+	token: process.env.VK_BOT,
+	execute_timeout: process.env.EXECUTE_TIMEOUT, // in ms   (50 by default)
+	polling_timeout: process.env.POLLING_TIMEOUT, // in secs (25 by default)
+});
+
+bot.use(async (ctx, next) => {
+	try {
+		await next();
+	} catch (e) {
+		console.error(e);
+	}
+});
 
 // 1 - 35-37
 // 2 - 38-39
@@ -16,7 +31,6 @@ const bot = new VkBot(process.env.VK_BOT);
 // 7 - первокурсник бакалавр или специалитет
 // 8 - первокурсник магистратура
 // 9 - социальная
-
 bot.command("Академическая стипендия", (ctx) => {
 	const id = ctx.message.from_id;
 
@@ -48,8 +62,9 @@ bot.command("Академическая стипендия", (ctx) => {
 										label: "Узнать рейтинг",
 										payload: JSON.stringify({
 											url:
-												"https://vk.com/stankin.moduli",
+												"https://vk.com/stankin.moduli#marks",
 										}),
+										hash: "marks",
 									},
 								}),
 							]).inline();
@@ -102,9 +117,11 @@ bot.command("Социальная стипендия", (ctx) => {
 });
 
 bot.command("Начать", (ctx) => {
-	console.log("Начать received");
 	const keyboard = Markup.keyboard(
-		["Академическая стипендия", "Социальная стипендия"],
+		[
+			Markup.button("Академическая стипендия", "secondary"),
+			Markup.button("Социальная стипендия", "secondary"),
+		],
 		{
 			columns: 1,
 		}
