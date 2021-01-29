@@ -1,6 +1,9 @@
 //load env
 require("dotenv").config();
 
+const express = require("express");
+const bodyParser = require("body-parser");
+
 const db = require("./queries");
 const VkBot = require("node-vk-bot-api");
 const Markup = require("node-vk-bot-api/lib/markup");
@@ -62,7 +65,7 @@ bot.command("Академическая стипендия", (ctx) => {
 										label: "Узнать рейтинг",
 										payload: JSON.stringify({
 											url:
-												"https://vk.com/stankin.moduli#marks",
+												"https://vk.com/stankin.moduli",
 										}),
 										hash: "marks",
 									},
@@ -107,6 +110,7 @@ bot.command("Социальная стипендия", (ctx) => {
 						payload: JSON.stringify({
 							url: "https://vk.com/stankin.moduli",
 						}),
+						hash: "marks",
 					},
 				}),
 			]).inline();
