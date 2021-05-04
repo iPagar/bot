@@ -1,15 +1,9 @@
 //load env
 require("dotenv").config();
 
-const express = require("express");
-const bodyParser = require("body-parser");
-
 const db = require("./queries");
 const VkBot = require("node-vk-bot-api");
 const Markup = require("node-vk-bot-api/lib/markup");
-
-const https = require("https");
-const fs = require("fs");
 
 const bot = new VkBot({
 	token: process.env.VK_BOT,
@@ -34,7 +28,7 @@ bot.use(async (ctx, next) => {
 // 7 - первокурсник бакалавр или специалитет
 // 8 - первокурсник магистратура
 // 9 - социальная
-bot.command("Академическая стипендия", (ctx) => {
+bot.command("Стипендия", (ctx) => {
 	const id = ctx.message.from_id;
 
 	db.getStudent(id).then(async (student) => {
@@ -43,42 +37,39 @@ bot.command("Академическая стипендия", (ctx) => {
 
 		if (student) {
 			await db.getSchoolarship().then(async (schoolarship) => {
-				if (schoolarship.length)
-					await db.getSemesters(id).then(async (semesters) => {
-						const length = semesters.length;
+				if (schoolarship.length) {
+					text += "\n\nСтипендия студентам первого семестра:";
+					text += `\n• Бакалавриат      | ${schoolarship[7].value} ₽`;
+					text += `\n• Специалитет     | ${schoolarship[7].value} ₽`;
+					text += `\n• Магистратура   | ${schoolarship[6].value} ₽`;
 
-						if (length > 1) {
-							text += "Рейтинг | Стипендия";
+					text +=
+						"\n\nСтипендия студентам второго и более старших семестров:";
+					text += "\nРейтинг | Стипендия";
+					text += `\n35-37     | ${schoolarship[0].value} ₽`;
+					text += `\n38-39     | ${schoolarship[1].value} ₽`;
+					text += `\n40-42     | ${schoolarship[2].value} ₽`;
+					text += `\n43-44     | ${schoolarship[3].value} ₽`;
+					text += `\n45-47     | ${schoolarship[4].value} ₽`;
+					text += `\n>48         | ${schoolarship[5].value} ₽`;
 
-							text += `\n35-37     | ${schoolarship[0].value} ₽`;
-							text += `\n38-39     | ${schoolarship[1].value} ₽`;
-							text += `\n40-42     | ${schoolarship[2].value} ₽`;
-							text += `\n43-44     | ${schoolarship[3].value} ₽`;
-							text += `\n45-47     | ${schoolarship[4].value} ₽`;
-							text += `\n>48         | ${schoolarship[5].value} ₽`;
+					text += `\n\nСоциальная стипендия: ${schoolarship[8].value} ₽`;
 
-							keyboard = Markup.keyboard([
-								Markup.button({
-									action: {
-										type: "open_app",
-										app_id: "7010368",
-										label: "Узнать рейтинг",
-										payload: JSON.stringify({
-											url:
-												"https://vk.com/stankin.moduli",
-										}),
-										hash: "marks",
-									},
+					keyboard = Markup.keyboard([
+						Markup.button({
+							action: {
+								type: "open_app",
+								app_id: "7010368",
+								label: "Узнать рейтинг",
+								payload: JSON.stringify({
+									button:
+										"Упс!😒 Кажется, старая версия ВК не поддерживает новые технологии...\n\nОткройте модули вручную!\nhttps://vk.com/stankin.moduli",
 								}),
-							]).inline();
-						} else {
-							text += "Стипендия студентам первого семестра:";
-
-							text += `\n• Бакалавриат/Специалитет: ${schoolarship[7].value} ₽`;
-							text += `\n• Магистратура: ${schoolarship[6].value} ₽`;
-						}
-					});
-				else text += "Нет информации о стипендиях";
+								hash: "marks",
+							},
+						}),
+					]).inline();
+				} else text += "Нет информации о стипендиях";
 			});
 		} else text += "Вас нет в системе:\nhttps://vk.com/stankin.moduli";
 
@@ -86,46 +77,35 @@ bot.command("Академическая стипендия", (ctx) => {
 	});
 });
 
+bot.command("Академическая стипендия", (ctx) => {
+	const id = ctx.message.from_id;
+
+	const { text, keyboard } = placeholder();
+
+	ctx.reply(text, null, keyboard);
+});
+
 bot.command("Социальная стипендия", (ctx) => {
 	const id = ctx.message.from_id;
 
-	db.getStudent(id).then(async (student) => {
-		let text = "";
-		let keyboard = null;
+	const { text, keyboard } = placeholder();
 
-		if (student) {
-			await db.getSchoolarship().then(async (schoolarship) => {
-				if (schoolarship.length)
-					text += `Социальная стипендия: ${schoolarship[8].value} ₽`;
-				else text += "Нет информации о стипендиях";
-			});
-		} else {
-			text += "Вас нет в системе";
-			keyboard = Markup.keyboard([
-				Markup.button({
-					action: {
-						type: "open_app",
-						app_id: "7010368",
-						label: "Войти",
-						payload: JSON.stringify({
-							url: "https://vk.com/stankin.moduli",
-						}),
-						hash: "marks",
-					},
-				}),
-			]).inline();
-		}
-
-		ctx.reply(text, null, keyboard);
-	});
+	ctx.reply(text, null, keyboard);
 });
+
+function placeholder() {
+	return {
+		keyboard: Markup.keyboard([Markup.button("Стипендия", "secondary")], {
+			columns: 1,
+		}),
+		text:
+			'Теперь, чтобы узнать информацию о стипендиях нужно написать "Стипендия"!',
+	};
+}
 
 bot.command("Начать", (ctx) => {
 	const keyboard = Markup.keyboard(
-		[
-			Markup.button("Академическая стипендия", "secondary"),
-			Markup.button("Социальная стипендия", "secondary"),
-		],
+		[Markup.button("Стипендия", "secondary")],
 		{
 			columns: 1,
 		}
