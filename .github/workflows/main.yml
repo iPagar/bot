@@ -52,7 +52,7 @@ jobs:
           source: "docker-compose.yml"
           target: "~/servers/botstankin"
 
-     - name: docker up
+      - name: docker up
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.HOST }}
