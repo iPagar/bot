@@ -1,22 +1,22 @@
 {
-	"name": "botstankin",
-	"version": "1.0.0",
-	"description": "",
-	"main": "index.js",
-	"scripts": {
-		"start": "node index.js",
-		"dev": "env=development nodemon index.js",
-		"test": "jest"
-	},
-	"dependencies": {
-		"express": "^4.17.1",
-		"node-vk-bot-api": "^3.5.0",
-		"pg": "^8.3.3"
-	},
-	"devDependencies": {
-		"jest": "^27.1.0",
-		"nodemon": "^1.19.4"
-	},
-	"author": "",
-	"license": "ISC"
+  "name": "botstankin",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "set NODE_ENV=development&& set VK_BOT=a67c84e5295c207c045fd571d36ac48e754ec01675c6978ee03c88ecd0a72d3fa479b8afb59fa23851e95&& nodemon index.js",
+    "test": "jest"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "node-vk-bot-api": "^3.5.0",
+    "pg": "^8.3.3"
+  },
+  "devDependencies": {
+    "jest": "^27.1.0",
+    "nodemon": "^1.19.4"
+  },
+  "author": "",
+  "license": "ISC"
 }
