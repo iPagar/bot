@@ -15,23 +15,23 @@ function getSchollarshipsMessage(schoolarship) {
   return !schoolarship.length
     ? "Нет информации о стипендиях"
     : `Стипендия студентам первого семестра:
-        • Бакалавриат | ${schoolarship[7].value} ₽
-  
-        Стипендия студентам первого семестра:
-        •  Бакалавриат  | ${schoolarship[7].value} ₽
-        • Специалитет  | ${schoolarship[7].value} ₽
-        • Магистратура | ${schoolarship[6].value} ₽
-  
-        Стипендия студентам второго и более старших семестров:
-        Рейтинг | Стипендия
-        35-37     | ${schoolarship[0].value} ₽
-        38-39     | ${schoolarship[1].value} ₽
-        40-42     | ${schoolarship[2].value} ₽
-        43-44     | ${schoolarship[3].value} ₽
-        45-47     | ${schoolarship[4].value} ₽
-        >48         | ${schoolarship[5].value} ₽
-  
-        Социальная стипендия: ${schoolarship[8].value} ₽`;
+• Бакалавриат | ${schoolarship[7].value} ₽
+
+Стипендия студентам первого семестра:
+•  Бакалавриат  | ${schoolarship[7].value} ₽
+• Специалитет  | ${schoolarship[7].value} ₽
+• Магистратура | ${schoolarship[6].value} ₽
+
+Стипендия студентам второго и более старших семестров:
+Рейтинг | Стипендия
+35-37     | ${schoolarship[0].value} ₽
+38-39     | ${schoolarship[1].value} ₽
+40-42     | ${schoolarship[2].value} ₽
+43-44     | ${schoolarship[3].value} ₽
+45-47     | ${schoolarship[4].value} ₽
+>48         | ${schoolarship[5].value} ₽
+
+Социальная стипендия: ${schoolarship[8].value} ₽`;
 }
 
 async function createSchoolarshipReply() {
