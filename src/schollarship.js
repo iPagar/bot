@@ -15,9 +15,6 @@ function getSchollarshipsMessage(schoolarship) {
   return !schoolarship.length
     ? "Нет информации о стипендиях"
     : `Стипендия студентам первого семестра:
-• Бакалавриат | ${schoolarship[7].value} ₽
-
-Стипендия студентам первого семестра:
 •  Бакалавриат  | ${schoolarship[7].value} ₽
 • Специалитет  | ${schoolarship[7].value} ₽
 • Магистратура | ${schoolarship[6].value} ₽
